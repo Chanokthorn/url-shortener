@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/labstack/echo/v4"
-	"net/http"
 	"os"
 	"url-shortener/app/infrastructure/connector"
 )
@@ -19,11 +18,5 @@ func main() {
 	pg := connector.NewPGConnector(pgHost, pgPort, pgUser, pgPassword, pgDBName)
 	fmt.Print(pg)
 	migrateDB(pgHost, pgPort, pgUser, pgPassword, pgDBName, pgMigratePath)
-	e.GET("/", func(c echo.Context) error {
-		return c.Redirect(http.StatusFound, "http://www.google.com")
-	})
-	e.GET("/john", func(c echo.Context) error {
-		return c.JSON(200, "john")
-	})
 	e.Logger.Fatal(e.Start(":3000"))
 }
