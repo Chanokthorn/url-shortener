@@ -1,7 +1,8 @@
 # url-shortener
+<h2>instructions</h2>
 <ol>
   <li>
-    <h2>run project</h2>
+    <h3>run project</h3>
     <ol>
       <li>
         <p>setup dependencies</p>
@@ -21,4 +22,10 @@
       </li>
     </ol>
   </li>
+  <li>
+    <p>run test</p>
+    <code>go test ./...</code>
+  </li>
 </ol>
+<h2>design</h2>
+![image](https://user-images.githubusercontent.com/21177109/116853507-60544b00-ac20-11eb-9fcd-1edda8e0a308.png)
