@@ -23,6 +23,10 @@
     </ol>
   </li>
   <li>
+    <h3>API reference</h3>
+    <p><a href="https://www.getpostman.com/collections/fdb19f553547fe53d830">postman</a><p>
+  </li>
+  <li>
     <h3>edit blacklist regex</h3>
     <p>modify dev.env on variable "BLACKLIST", separate by "," eg: ^.*troll.*,^.*forbidden.*
   </li>
