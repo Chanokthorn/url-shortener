@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
+	"log"
 	"os"
 	"strings"
 	"url-shortener/app/infrastructure/connector"
@@ -19,6 +21,10 @@ func parseEnvAsStringArray(name string) []string {
 }
 
 func main() {
+	err := godotenv.Load("dev.env")
+	if err != nil {
+		log.Fatalf("error loading .env file")
+	}
 	e := echo.New()
 	pgHost := os.Getenv("PG_HOST")
 	pgPort := os.Getenv("PG_PORT")
@@ -39,5 +45,5 @@ func main() {
 	router.CreateURLClientRouter(e.Group("/client"), urlClientController)
 	router.CreateURLAdminRouter(e.Group("/admin"), urlAdminController, adminTokenMiddleware)
 	router.CreateURLRedirectRouter(e.Group("/redirect"), urlRedirectController)
-	e.Logger.Fatal(e.Start(":3000"))
+	e.Logger.Fatal(e.Start(":" + os.Getenv("APP_PORT")))
 }
