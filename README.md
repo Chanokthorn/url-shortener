@@ -26,6 +26,44 @@
     <h3>API reference:</h3>
     <p>postman import file</p>
     <a href="https://www.getpostman.com/collections/fdb19f553547fe53d830">https://www.getpostman.com/collections/fdb19f553547fe53d830</a>
+    <h3>documentation</h3>
+    <pre>
+client api:
+└───create URL:
+│   │ POST {app-url}/client/
+│   │ body: {
+│   │ fullURL: string eg: "http://www.google.com/"
+│   │ expireDate: string eg: "2021-05-05T11:08:03Z"
+│   │ }
+│   │ response: created shortCode
+└───get shortCode from fullURL:
+    │ GET {app-url}/short-code
+    │ query param: full-url
+    │ eg:  {app-url}/short-code?full-url=http://www.google.com/
+    │ response: shortCode
+  
+  
+admin api: (required header "admin-token" with default value "supersecrettoken")
+└───list URL:
+│   │ GET {app-url}/admin/url?short-code-filter=&full-url-keyword-filter
+│   │ query params: short-code-filter, full-url-keyword-filter
+│   │ eg: {app-url}/admin/url?short-code-filter=&full-url-keyword-filter=google
+│   │ reponse: list of URL
+└───delete URL:
+    │ DELETE {app-url}/admin/url/:short-code
+    │ param: short-code
+    │ eg: {app-url}/admin/url/0fc5sl9MR
+    │ resposne: "delted"
+     
+redirect api:
+└───redirectURL:
+    GET {app-url}/redirect/:short-code
+    param: short-code
+    eg: {app-url}/redirect/YTGW6lrMg
+    reponse: redirect to fullURL
+  
+</pre>
+
   </li>
   <li>
     <h3>edit blacklist regex</h3>
