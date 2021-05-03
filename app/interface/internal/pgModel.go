@@ -14,7 +14,7 @@ type URLPG struct {
 	NumberOfHits  sql.NullInt64  `db:"number_of_hits"`
 }
 
-func (u *URLPG) getURL() *domain.URL {
+func (u *URLPG) ToURL() *domain.URL {
 	return &domain.URL{
 		ShortCode:     u.ShortCode.String,
 		FullURL:       u.FullURL.String,

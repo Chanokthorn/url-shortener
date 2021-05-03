@@ -21,6 +21,7 @@ require (
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.0.1 // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
+	github.com/teris-io/shortid v0.0.0-20201117134242-e59966efd125
 	google.golang.org/grpc v1.37.0 // indirect
 	gotest.tools/v3 v3.0.3 // indirect
 )
