@@ -28,4 +28,4 @@
   </li>
 </ol>
 <h2>design</h2>
-![image](https://user-images.githubusercontent.com/21177109/116853507-60544b00-ac20-11eb-9fcd-1edda8e0a308.png)
+<img src="https://user-images.githubusercontent.com/21177109/116853507-60544b00-ac20-11eb-9fcd-1edda8e0a308.png"/>
