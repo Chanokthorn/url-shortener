@@ -23,7 +23,7 @@
     </ol>
   </li>
   <li>
-    <p>run test</p>
+    <h3>run test</h3>
     <code>go test ./...</code>
   </li>
 </ol>
