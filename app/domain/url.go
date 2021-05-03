@@ -10,3 +10,7 @@ type URL struct {
 	Deleted       bool
 	NumberOfHits  int
 }
+
+func (u *URL) IsEmpty() bool {
+	return *u == URL{}
+}

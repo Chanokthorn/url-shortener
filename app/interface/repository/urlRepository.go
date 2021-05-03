@@ -16,6 +16,7 @@ type URLRepository interface {
 	GetShortCodeByFullURL(ctx context.Context, fullURL string) (string, error)
 	DeleteURL(ctx context.Context, shortCode string) error
 	ListURL(ctx context.Context, shortCodeFilter string, fullURLKeywordFilter string) ([]domain.URL, error)
+	IncreaseURLNoOfHits(ctx context.Context, shortCode string) error
 }
 
 type urlRepository struct {
@@ -46,12 +47,15 @@ func (u *urlRepository) CreateURL(ctx context.Context, url domain.URL) error {
 }
 
 func (u *urlRepository) GetURLByShortCode(ctx context.Context, shortCode string) (domain.URL, error) {
-	var url internal.URLPG
-	err := u.db.SelectContext(ctx, &url, "SELECT * FROM url WHERE short_code = ?", shortCode)
+	var res []internal.URLPG
+	err := u.db.SelectContext(ctx, &res, "SELECT * FROM url WHERE short_code = $1", shortCode)
 	if err != nil {
 		return domain.URL{}, err
 	}
-	return *url.ToURL(), nil
+	if len(res) == 0 {
+		return domain.URL{}, nil
+	}
+	return *(res[0].ToURL()), nil
 }
 
 func (u *urlRepository) GetShortCodeByFullURL(ctx context.Context, fullURL string) (string, error) {
@@ -98,4 +102,16 @@ func (u *urlRepository) ListURL(ctx context.Context, shortCodeFilter string, ful
 		result = append(result, *elem.ToURL())
 	}
 	return result, nil
+}
+
+func (u *urlRepository) IncreaseURLNoOfHits(ctx context.Context, shortCode string) error {
+	statement := `UPDATE url SET number_of_hits = number_of_hits + 1 WHERE short_code = $1`
+	res, err := u.db.MustExecContext(ctx, statement, shortCode).RowsAffected()
+	if err != nil {
+		return err
+	}
+	if res != 1 {
+		return errors.New("url not found")
+	}
+	return nil
 }

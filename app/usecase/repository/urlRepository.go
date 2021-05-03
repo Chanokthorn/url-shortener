@@ -11,4 +11,5 @@ type URLRepository interface {
 	GetShortCodeByFullURL(ctx context.Context, fullURL string) (string, error)
 	DeleteURL(ctx context.Context, shortCode string) error
 	ListURL(ctx context.Context, shortCodeFilter string, fullURLKeywordFilter string) ([]domain.URL, error)
+	IncreaseURLNoOfHits(ctx context.Context, shortCode string) error
 }
