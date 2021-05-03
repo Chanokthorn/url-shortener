@@ -59,7 +59,7 @@ func Test_urlInteractor_GetRedirectURL(t *testing.T) {
 		Deleted:       false,
 		NumberOfHits:  0,
 	}
-	urlRepo3.On("GetURLByShortCode", mock.Anything, mock.Anything).Return(url4, nil)
+	urlRepo4.On("GetURLByShortCode", mock.Anything, mock.Anything).Return(url4, nil)
 
 	tests := []struct {
 		name    string

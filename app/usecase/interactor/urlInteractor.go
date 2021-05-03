@@ -3,6 +3,7 @@ package interactor
 import (
 	"context"
 	"github.com/teris-io/shortid"
+	"net/http"
 	"time"
 	"url-shortener/app/domain"
 	"url-shortener/app/usecase/repository"
@@ -45,13 +46,19 @@ func (u *urlInteractor) CreateURL(ctx context.Context, fullURL string, hasExpire
 }
 
 func (u *urlInteractor) GetRedirectURL(ctx context.Context, shortCode string) (string, int, error) {
-	//url, err := u.urlRepository.GetURLByShortCode(ctx, shortCode)
-	//if err != nil {
-	//	return "", http.StatusInternalServerError, err
-	//}
-	//if url.
-	//return u.GetRedirectURL(ctx, shortCode)
-	panic("implement me")
+	url, err := u.urlRepository.GetURLByShortCode(ctx, shortCode)
+	if err != nil {
+		return "", http.StatusInternalServerError, err
+	}
+	if url.Deleted {
+		return "", http.StatusGone, nil
+	}
+	if url.HasExpireDate {
+		if time.Now().After(url.ExpireDate) {
+			return "", http.StatusGone, nil
+		}
+	}
+	return url.FullURL, http.StatusFound, nil
 }
 
 func (u *urlInteractor) ListURL(ctx context.Context, shortCodeFilter string, fullURLKeywordFilter string) ([]domain.URL, error) {
