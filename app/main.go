@@ -5,6 +5,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"os"
 	"url-shortener/app/infrastructure/connector"
+	"url-shortener/app/infrastructure/middleware"
+	"url-shortener/app/infrastructure/router"
 	"url-shortener/app/interface/controller"
 	"url-shortener/app/interface/repository"
 	"url-shortener/app/usecase/interactor"
@@ -26,10 +28,12 @@ func main() {
 	urlClientController := controller.NewURLClientController(urlInteractor)
 	urlAdminController := controller.NewURLAdminController(urlInteractor)
 	urlRedirectController := controller.NewURLRedirectController(urlInteractor)
-	e.POST("/client/", urlClientController.CreateURL)
-	e.GET("/client/short-code", urlClientController.GetShortCodeFromFullURL)
-	e.GET("/admin/url", urlAdminController.ListURL)
-	e.DELETE("/admin/url/:short-code", urlAdminController.DeleteURL)
-	e.GET("/redirect/:short-code", urlRedirectController.Redirect)
+	adminTokenMiddleware := middleware.NewAdminTokenMiddleware(os.Getenv("ADMIN_TOKEN"))
+	router.CreateURLClientRouter(e.Group("/client"), urlClientController)
+	router.CreateURLAdminRouter(e.Group("/admin"), urlAdminController, adminTokenMiddleware)
+	router.CreateURLRedirectRouter(e.Group("/redirect"), urlRedirectController)
+	//e.GET("/admin/url", urlAdminController.ListURL)
+	//e.DELETE("/admin/url/:short-code", urlAdminController.DeleteURL)
+	//e.GET("/redirect/:short-code", urlRedirectController.Redirect)
 	e.Logger.Fatal(e.Start(":3000"))
 }
