@@ -64,7 +64,7 @@ func (u *urlRepository) GetShortCodeByFullURL(ctx context.Context, fullURL strin
 	if err != nil {
 		return "", err
 	}
-	if len(res) != 1 {
+	if len(res) == 0 {
 		return "", errors.New("not found")
 	}
 	return res[0], nil
