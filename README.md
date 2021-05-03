@@ -41,8 +41,7 @@ client api:
 .   │ query param: full-url
 .   │ eg:  {app-url}/short-code?full-url=http://www.google.com/
 .   │ response: shortCode
-  
-  
+.
 admin api: (required header "admin-token" with default value "supersecrettoken")
 └───list URL:
 │   │ GET {app-url}/admin/url?short-code-filter=&full-url-keyword-filter
@@ -54,7 +53,7 @@ admin api: (required header "admin-token" with default value "supersecrettoken")
 .   │ param: short-code
 .   │ eg: {app-url}/admin/url/0fc5sl9MR
 .   │ resposne: "delted"
-     
+.
 redirect api:
 └───redirectURL:
 .   │ GET {app-url}/redirect/:short-code
