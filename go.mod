@@ -14,6 +14,7 @@ require (
 	github.com/google/go-cmp v0.5.5 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/jmoiron/sqlx v1.3.3
+	github.com/joho/godotenv v1.3.0
 	github.com/labstack/echo/v4 v4.2.2
 	github.com/lib/pq v1.2.0
 	github.com/moby/term v0.0.0-20201216013528-df9cb8a40635 // indirect
