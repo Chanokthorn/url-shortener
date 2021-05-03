@@ -23,6 +23,10 @@
     </ol>
   </li>
   <li>
+    <h3>edit blacklist regex</h3>
+    <p>modify dev.env on variable "BLACKLIST", separate by "," eg: ^.*troll.*,^.*forbidden.*
+  </li>
+  <li>
     <h3>run test</h3>
     <code>go test ./...</code>
   </li>
