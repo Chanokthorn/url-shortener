@@ -33,7 +33,7 @@ client api:
 │   │ POST {app-url}/client/
 │   │ body: {
 │   │ fullURL: string eg: "http://www.google.com/"
-│   │ expireDate: string eg: "2021-05-05T11:08:03Z"
+│   │ expireDate: string eg: "2021-05-05T11:08:03Z" <- optional: this field can be removed
 │   │ }
 │   │ response: created shortCode
 └───get shortCode from fullURL:
