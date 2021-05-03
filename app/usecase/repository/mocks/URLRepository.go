@@ -84,6 +84,20 @@ func (_m *URLRepository) GetURLByShortCode(ctx context.Context, shortCode string
 	return r0, r1
 }
 
+// IncreaseURLNoOfHits provides a mock function with given fields: ctx, shortCode
+func (_m *URLRepository) IncreaseURLNoOfHits(ctx context.Context, shortCode string) error {
+	ret := _m.Called(ctx, shortCode)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, string) error); ok {
+		r0 = rf(ctx, shortCode)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // ListURL provides a mock function with given fields: ctx, shortCodeFilter, fullURLKeywordFilter
 func (_m *URLRepository) ListURL(ctx context.Context, shortCodeFilter string, fullURLKeywordFilter string) ([]domain.URL, error) {
 	ret := _m.Called(ctx, shortCodeFilter, fullURLKeywordFilter)

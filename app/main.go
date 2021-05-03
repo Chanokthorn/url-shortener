@@ -25,9 +25,11 @@ func main() {
 	urlInteractor := interactor.NewUrlInteractor(urlRepository)
 	urlClientController := controller.NewURLClientController(urlInteractor)
 	urlAdminController := controller.NewURLAdminController(urlInteractor)
+	urlRedirectController := controller.NewURLRedirectController(urlInteractor)
 	e.POST("/client/", urlClientController.CreateURL)
 	e.GET("/client/short-code", urlClientController.GetShortCodeFromFullURL)
 	e.GET("/admin/url", urlAdminController.ListURL)
 	e.DELETE("/admin/url/:short-code", urlAdminController.DeleteURL)
+	e.GET("/redirect/:short-code", urlRedirectController.Redirect)
 	e.Logger.Fatal(e.Start(":3000"))
 }

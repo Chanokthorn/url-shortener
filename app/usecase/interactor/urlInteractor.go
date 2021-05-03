@@ -48,7 +48,7 @@ func (u *urlInteractor) CreateURL(ctx context.Context, fullURL string, hasExpire
 func (u *urlInteractor) GetRedirectURL(ctx context.Context, shortCode string) (string, int, error) {
 	url, err := u.urlRepository.GetURLByShortCode(ctx, shortCode)
 	if err != nil {
-		return "", http.StatusInternalServerError, err
+		return "", http.StatusNotFound, err
 	}
 	if url.Deleted {
 		return "", http.StatusGone, nil
@@ -57,6 +57,13 @@ func (u *urlInteractor) GetRedirectURL(ctx context.Context, shortCode string) (s
 		if time.Now().After(url.ExpireDate) {
 			return "", http.StatusGone, nil
 		}
+	}
+	if url.IsEmpty() {
+		return "", http.StatusNotFound, nil
+	}
+	err = u.urlRepository.IncreaseURLNoOfHits(ctx, shortCode)
+	if err != nil {
+		return "", http.StatusInternalServerError, err
 	}
 	return url.FullURL, http.StatusFound, nil
 }

@@ -35,7 +35,9 @@ func (u *urlClientController) CreateURL(e echo.Context) error {
 	if request.ExpireDate != nil {
 		hasExireDate = true
 		expireDate, err = time.Parse(time.RFC3339, *request.ExpireDate)
-		return echo.NewHTTPError(http.StatusBadRequest, "invalid date format")
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("invalid date format: %v", err))
+		}
 	}
 	shortCode, err := u.urlInteractor.CreateURL(e.Request().Context(), request.FullURL, hasExireDate, expireDate)
 	if err != nil {
