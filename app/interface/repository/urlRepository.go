@@ -67,10 +67,13 @@ func (u *urlRepository) GetShortCodeByFullURL(ctx context.Context, fullURL strin
 }
 
 func (u *urlRepository) DeleteURL(ctx context.Context, shortCode string) error {
-	statement := `UPDATE url SET deleted = true WHERE short_code = ?`
-	_, err := u.db.MustExecContext(ctx, statement, shortCode).RowsAffected()
+	statement := `UPDATE url SET deleted = true WHERE short_code = $1`
+	res, err := u.db.MustExecContext(ctx, statement, shortCode).RowsAffected()
 	if err != nil {
 		return err
+	}
+	if res != 1 {
+		return errors.New("url not found")
 	}
 	return nil
 }

@@ -28,5 +28,6 @@ func main() {
 	e.POST("/client/", urlClientController.CreateURL)
 	e.GET("/client/short-code", urlClientController.GetShortCodeFromFullURL)
 	e.GET("/admin/url", urlAdminController.ListURL)
+	e.DELETE("/admin/url/:short-code", urlAdminController.DeleteURL)
 	e.Logger.Fatal(e.Start(":3000"))
 }

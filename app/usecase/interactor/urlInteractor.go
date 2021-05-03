@@ -13,6 +13,7 @@ type URLInteractor interface {
 	GetRedirectURL(ctx context.Context, shortCode string) (string, int, error)
 	ListURL(ctx context.Context, shortCodeFilter string, fullURLKeywordFilter string) ([]domain.URL, error)
 	GetShortCode(ctx context.Context, fullURL string) (string, error)
+	DeleteURL(ctx context.Context, shortCode string) error
 }
 
 type urlInteractor struct {
@@ -59,4 +60,8 @@ func (u *urlInteractor) ListURL(ctx context.Context, shortCodeFilter string, ful
 
 func (u *urlInteractor) GetShortCode(ctx context.Context, fullURL string) (string, error) {
 	return u.urlRepository.GetShortCodeByFullURL(ctx, fullURL)
+}
+
+func (u *urlInteractor) DeleteURL(ctx context.Context, shortCode string) error {
+	return u.urlRepository.DeleteURL(ctx, shortCode)
 }

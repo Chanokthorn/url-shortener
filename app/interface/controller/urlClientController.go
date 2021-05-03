@@ -41,7 +41,7 @@ func (u *urlClientController) CreateURL(e echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("unable to create url: %v", err))
 	}
-	err = e.JSON(http.StatusOK, shortCode)
+	err = e.String(http.StatusOK, shortCode)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "unable to parse change to JSON")
 	}
@@ -57,7 +57,7 @@ func (u *urlClientController) GetShortCodeFromFullURL(e echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("unable to get short code: %v", err))
 	}
-	err = e.JSON(http.StatusOK, shortCode)
+	err = e.String(http.StatusOK, shortCode)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "unable to parse change to JSON")
 	}

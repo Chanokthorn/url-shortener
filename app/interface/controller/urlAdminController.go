@@ -35,10 +35,17 @@ func (u *urlAdminController) ListURL(e echo.Context) error {
 }
 
 func (u *urlAdminController) DeleteURL(e echo.Context) error {
-	//shortCode := e.Param("short-code")
-	//if shortCode == "" {
-	//	return echo.NewHTTPError(http.StatusBadRequest, "empty short code")
-	//}
-	//
-	panic("implement me")
+	shortCode := e.Param("short-code")
+	if shortCode == "" {
+		return echo.NewHTTPError(http.StatusBadRequest, "empty short code")
+	}
+	err := u.urlInteractor.DeleteURL(e.Request().Context(), shortCode)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("unable to delete url: %v", err))
+	}
+	err = e.String(http.StatusOK, "deleted")
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("unable send response: %v", err))
+	}
+	return nil
 }
