@@ -2,8 +2,10 @@ package interactor
 
 import (
 	"context"
+	"fmt"
 	"github.com/teris-io/shortid"
 	"net/http"
+	"regexp"
 	"time"
 	"url-shortener/app/domain"
 	"url-shortener/app/usecase/repository"
@@ -19,13 +21,26 @@ type URLInteractor interface {
 
 type urlInteractor struct {
 	urlRepository repository.URLRepository
+	blacklist     []string
 }
 
-func NewUrlInteractor(urlRepository repository.URLRepository) URLInteractor {
-	return &urlInteractor{urlRepository: urlRepository}
+func NewUrlInteractor(urlRepository repository.URLRepository, blacklist []string) URLInteractor {
+	return &urlInteractor{
+		urlRepository: urlRepository,
+		blacklist:     blacklist,
+	}
 }
 
 func (u *urlInteractor) CreateURL(ctx context.Context, fullURL string, hasExpireDate bool, expireDate time.Time) (string, error) {
+	for _, pattern := range u.blacklist {
+		matched, err := regexp.MatchString(pattern, fullURL)
+		if err != nil {
+			return "", fmt.Errorf("unable to perform regex matching: %v", err)
+		}
+		if matched {
+			return "", fmt.Errorf("full url had been blacklisted")
+		}
+	}
 	shortCode, err := shortid.Generate()
 	if err != nil {
 		return "", err

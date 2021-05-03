@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"os"
+	"strings"
 	"url-shortener/app/infrastructure/connector"
 	"url-shortener/app/infrastructure/middleware"
 	"url-shortener/app/infrastructure/router"
@@ -11,6 +12,11 @@ import (
 	"url-shortener/app/interface/repository"
 	"url-shortener/app/usecase/interactor"
 )
+
+func parseEnvAsStringArray(name string) []string {
+	s := os.Getenv(name)
+	return strings.Split(s, ",")
+}
 
 func main() {
 	e := echo.New()
@@ -24,7 +30,8 @@ func main() {
 	fmt.Print(pg)
 	migrateDB(pgHost, pgPort, pgUser, pgPassword, pgDBName, pgMigratePath)
 	urlRepository := repository.NewUrlRepository(pg.DB)
-	urlInteractor := interactor.NewUrlInteractor(urlRepository)
+	blacklist := parseEnvAsStringArray("BLACKLIST")
+	urlInteractor := interactor.NewUrlInteractor(urlRepository, blacklist)
 	urlClientController := controller.NewURLClientController(urlInteractor)
 	urlAdminController := controller.NewURLAdminController(urlInteractor)
 	urlRedirectController := controller.NewURLRedirectController(urlInteractor)
@@ -32,8 +39,5 @@ func main() {
 	router.CreateURLClientRouter(e.Group("/client"), urlClientController)
 	router.CreateURLAdminRouter(e.Group("/admin"), urlAdminController, adminTokenMiddleware)
 	router.CreateURLRedirectRouter(e.Group("/redirect"), urlRedirectController)
-	//e.GET("/admin/url", urlAdminController.ListURL)
-	//e.DELETE("/admin/url/:short-code", urlAdminController.DeleteURL)
-	//e.GET("/redirect/:short-code", urlRedirectController.Redirect)
 	e.Logger.Fatal(e.Start(":3000"))
 }

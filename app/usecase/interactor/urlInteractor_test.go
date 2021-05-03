@@ -11,6 +11,87 @@ import (
 	"url-shortener/app/usecase/repository/mocks"
 )
 
+func Test_urlInteractor_CreateURL(t *testing.T) {
+	type fields struct {
+		urlRepository repository.URLRepository
+		blacklist     []string
+	}
+	type args struct {
+		ctx           context.Context
+		fullURL       string
+		hasExpireDate bool
+		expireDate    time.Time
+	}
+	urlRepo := new(mocks.URLRepository)
+	urlRepo.On("CreateURL", mock.Anything, mock.Anything).Return(nil)
+	blacklist := []string{
+		"^.*troll.*",
+		"^.*forbidden.*",
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "successful creation",
+			fields: fields{
+				urlRepository: urlRepo,
+				blacklist:     blacklist,
+			},
+			args: args{
+				ctx:           nil,
+				fullURL:       "https://www.google.com/",
+				hasExpireDate: false,
+				expireDate:    time.Time{},
+			},
+			wantErr: false,
+		},
+		{
+			name: "forbidden creation 1	",
+			fields: fields{
+				urlRepository: urlRepo,
+				blacklist:     blacklist,
+			},
+			args: args{
+				ctx:           nil,
+				fullURL:       "https://www.sometroller.com/",
+				hasExpireDate: false,
+				expireDate:    time.Time{},
+			},
+			wantErr: true,
+		},
+		{
+			name: "forbidden creation 2	",
+			fields: fields{
+				urlRepository: urlRepo,
+				blacklist:     blacklist,
+			},
+			args: args{
+				ctx:           nil,
+				fullURL:       "https://www.justaforbiddensite.com/",
+				hasExpireDate: false,
+				expireDate:    time.Time{},
+			},
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			u := &urlInteractor{
+				urlRepository: tt.fields.urlRepository,
+				blacklist:     tt.fields.blacklist,
+			}
+			_, err := u.CreateURL(tt.args.ctx, tt.args.fullURL, tt.args.hasExpireDate, tt.args.expireDate)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("CreateURL() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+		})
+	}
+}
+
 func Test_urlInteractor_GetRedirectURL(t *testing.T) {
 	currTime := time.Now()
 	type fields struct {
@@ -116,6 +197,7 @@ func Test_urlInteractor_GetRedirectURL(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			u := &urlInteractor{
 				urlRepository: tt.fields.urlRepository,
+				blacklist:     []string{},
 			}
 			got, got1, err := u.GetRedirectURL(tt.args.ctx, tt.args.shortCode)
 			if (err != nil) != tt.wantErr {
