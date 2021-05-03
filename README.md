@@ -23,8 +23,9 @@
     </ol>
   </li>
   <li>
-    <h3>API reference</h3>
-    <p><a href="https://www.getpostman.com/collections/fdb19f553547fe53d830">postman</a><p>
+    <h3>API reference:</h3>
+    <p>postman import file</p>
+    <a href="https://www.getpostman.com/collections/fdb19f553547fe53d830">https://www.getpostman.com/collections/fdb19f553547fe53d830</a>
   </li>
   <li>
     <h3>edit blacklist regex</h3>
